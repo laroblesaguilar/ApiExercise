@@ -97,5 +97,4 @@ namespace DynamoDb.Libs.DynamoDb
 
         }
     }
-    ///https://www.youtube.com/watch?v=o3dZCM9i0Ss
 }
