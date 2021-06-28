@@ -118,5 +118,14 @@ namespace DynamoDb.Libs.DynamoDb
             var context = new DynamoDBContext(dynamoClient);
             return await context.LoadAsync<MiniLibrary>(id);
         }
+
+        public async Task<MiniLibrary> AddBook(int miniLibId, Book book)
+        {
+            var context = new DynamoDBContext(dynamoClient);
+            var miniLib = await context.LoadAsync<MiniLibrary>(miniLibId);
+            miniLib.Books.Add(book);
+            await context.SaveAsync(miniLib);
+            return miniLib;
+        }
     }
 }

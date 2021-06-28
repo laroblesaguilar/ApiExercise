@@ -48,5 +48,23 @@ namespace ApiExercise.Controllers
         {
             return Ok(await dynamoDbExample.GetMiniLibraryById(id));
         }
+
+        [HttpPost]
+        [Route("minilibrary/{id}/add")]
+        public async Task<IActionResult> AddBookToMiniLibrary(int id)
+        {
+            Book book = new Book
+            {
+                Author = new Author
+                {
+                    FirstName = "Luis",
+                    LastName = "Robles"
+                },
+                Title = "Luis' Book",
+                ISBN = "12345678910",
+                IsFiction = false
+            };
+            return Ok(await dynamoDbExample.AddBook(id, book));
+        }
     }
 }

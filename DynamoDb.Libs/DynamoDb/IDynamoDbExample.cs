@@ -10,5 +10,6 @@ namespace DynamoDb.Libs
         void CreateDynamoDbTableAsync();
         Task Insert();
         Task<MiniLibrary> GetMiniLibraryById(int id);
+        Task<MiniLibrary> AddBook(int miniLibId, Book book);
     }
 }
