@@ -25,5 +25,22 @@ namespace ApiExercise.Controllers
             dynamoDbExample.CreateDynamoDbTableAsync();
             return Ok();
         }
+
+        [HttpPost]
+        [Route("insert")]
+        public IActionResult Insert()
+        {
+            dynamoDbExample.Insert();
+            return Ok();
+        }
+        [HttpPost]
+
+
+        [Route("opm/insert")]
+        public IActionResult InsertOPM()
+        {
+            dynamoDbExample.InsertObjectPersistenceModel();
+            return Ok();
+        }
     }
 }
