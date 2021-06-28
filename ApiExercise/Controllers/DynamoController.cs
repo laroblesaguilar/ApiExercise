@@ -33,14 +33,20 @@ namespace ApiExercise.Controllers
             dynamoDbExample.Insert();
             return Ok();
         }
-        [HttpPost]
 
+        //[HttpPost]
+        //[Route("opm/insert")]
+        //public IActionResult InsertOPM()
+        //{
+        //    dynamoDbExample.InsertObjectPersistenceModel();
+        //    return Ok();
+        //}
 
-        [Route("opm/insert")]
-        public IActionResult InsertOPM()
+        [HttpGet]
+        [Route("minilibrary/{id}")]
+        public async Task<IActionResult> GetMiniLibraries(int id)
         {
-            dynamoDbExample.InsertObjectPersistenceModel();
-            return Ok();
+            return Ok(await dynamoDbExample.GetMiniLibraryById(id));
         }
     }
 }

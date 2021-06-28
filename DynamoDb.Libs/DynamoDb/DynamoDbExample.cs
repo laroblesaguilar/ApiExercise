@@ -53,7 +53,7 @@ namespace DynamoDb.Libs.DynamoDb
 
                 WaitUntilTableReady("MiniLibraries");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
@@ -87,29 +87,36 @@ namespace DynamoDb.Libs.DynamoDb
 
         public async Task Insert()
         {
-            var table = Table.LoadTable(dynamoClient, "MiniLibraries");
-
-            var miniLib = new Document();
-
-            miniLib["Id"] = 1;
-            miniLib["Description"] = "Mini Library located at Alamo Ranch";
-            miniLib["Books"] = new List<string> { "Book1", "Book2", "Book3" };
-            miniLib["Address"] = "123 Alamo Ranch Pkwy";
-
-            await table.PutItemAsync(miniLib);
-        }
-        public async Task InsertObjectPersistenceModel()
-        {
             var context = new DynamoDBContext(dynamoClient);
+
             var miniLib = new MiniLibrary
             {
                 Id = 2,
                 Description = "Mini Library added using OPM",
-                Books = new List<string> { "Book 1", "Book 2", "Book 3" },
+                Books = new List<Book>
+                {
+                    new Book
+                    {
+                        Author = new Author
+                        {
+                            FirstName = "James",
+                            LastName = "Lampkins"
+                        },
+                        Title = "James' Book",
+                        ISBN = "123456798",
+                        IsFiction = true
+                    }
+                },
                 Address = "123 Street"
             };
 
             await context.SaveAsync(miniLib);
+        }
+
+        public async Task<MiniLibrary> GetMiniLibraryById(int id)
+        {
+            var context = new DynamoDBContext(dynamoClient);
+            return await context.LoadAsync<MiniLibrary>(id);
         }
     }
 }

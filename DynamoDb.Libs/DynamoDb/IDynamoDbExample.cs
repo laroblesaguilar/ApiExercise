@@ -9,6 +9,6 @@ namespace DynamoDb.Libs
     {
         void CreateDynamoDbTableAsync();
         Task Insert();
-        Task InsertObjectPersistenceModel();
+        Task<MiniLibrary> GetMiniLibraryById(int id);
     }
 }

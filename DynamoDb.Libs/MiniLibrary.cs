@@ -11,7 +11,7 @@ namespace DynamoDb.Libs
         [DynamoDBHashKey]
         public int Id { get; set; }
         public string Description { get; set; }
-        public List<string> Books { get; set; }
+        public List<Book> Books { get; set; }
         public string Address { get; set; }
     }
 }
