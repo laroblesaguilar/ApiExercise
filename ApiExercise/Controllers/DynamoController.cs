@@ -26,45 +26,61 @@ namespace ApiExercise.Controllers
             return Ok();
         }
 
+        //     {
+        //    "Id": 4,
+        //    "Description":"Mini Lib sent from request body",
+        //    "Books": [{
+        //        "Author": {"FirstName":"Test", "LastName": "McTesterson"},
+        //        "Tile":"RequestBodyTitle",
+        //        "ISBN": "12345678910",
+        //        "IsFiction": true
+        //    }],
+        //    "Address": { "Street": "6218 Gilmer Ml", "City": "San Antonio", "State": "Texas", "ZipCode": 78253}
+        //    } Example 
         [HttpPost]
         [Route("insert")]
-        public IActionResult Insert()
+        public IActionResult Insert([FromBody] MiniLibrary miniLibrary)
         {
-            dynamoDbExample.Insert();
+            dynamoDbExample.Insert(miniLibrary);
             return Ok();
         }
 
-        //[HttpPost]
-        //[Route("opm/insert")]
-        //public IActionResult InsertOPM()
-        //{
-        //    dynamoDbExample.InsertObjectPersistenceModel();
-        //    return Ok();
-        //}
+        [HttpPost]
+        [Route("minilibrary/{id}/delete")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            await dynamoDbExample.Delete(id);
+            return Ok();
+        }
+
 
         [HttpGet]
         [Route("minilibrary/{id}")]
-        public async Task<IActionResult> GetMiniLibraries(int id)
+        public async Task<IActionResult> GetMiniLibraryById(int id)
         {
             return Ok(await dynamoDbExample.GetMiniLibraryById(id));
         }
 
+
+        //    [{
+        //    "Author": {"FirstName":"Leo", "LastName": "Robles"},
+        //    "Title":"Narnia",
+        //    "ISBN": "12345678910",
+        //    "IsFiction": true
+        //}] Example
         [HttpPost]
         [Route("minilibrary/{id}/add")]
-        public async Task<IActionResult> AddBookToMiniLibrary(int id)
+        public async Task<IActionResult> AddBookToMiniLibrary(int id, [FromBody]List<Book> books)
         {
-            Book book = new Book
-            {
-                Author = new Author
-                {
-                    FirstName = "Luis",
-                    LastName = "Robles"
-                },
-                Title = "Luis' Book",
-                ISBN = "12345678910",
-                IsFiction = false
-            };
-            return Ok(await dynamoDbExample.AddBook(id, book));
+            return Ok(await dynamoDbExample.AddBooks(id, books));
+        }
+
+
+        [HttpGet]
+        [Route("minilibrary/search")]
+        public async Task<IActionResult> FindMiniLibraryByCity()
+        {
+            return Ok(await dynamoDbExample.GetMiniLibrariesByBook("Henderson"));
         }
     }
 }

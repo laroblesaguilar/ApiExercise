@@ -85,32 +85,17 @@ namespace DynamoDb.Libs.DynamoDb
             }
         }
 
-        public async Task Insert()
+        public async Task Insert(MiniLibrary miniLibrary)
         {
             var context = new DynamoDBContext(dynamoClient);
+            await context.SaveAsync(miniLibrary);
+        }
 
-            var miniLib = new MiniLibrary
-            {
-                Id = 2,
-                Description = "Mini Library added using OPM",
-                Books = new List<Book>
-                {
-                    new Book
-                    {
-                        Author = new Author
-                        {
-                            FirstName = "James",
-                            LastName = "Lampkins"
-                        },
-                        Title = "James' Book",
-                        ISBN = "123456798",
-                        IsFiction = true
-                    }
-                },
-                Address = "123 Street"
-            };
 
-            await context.SaveAsync(miniLib);
+        public async Task Delete(int miniLibraryId)
+        {
+            var context = new DynamoDBContext(dynamoClient);
+            await context.DeleteAsync<MiniLibrary>(miniLibraryId);
         }
 
         public async Task<MiniLibrary> GetMiniLibraryById(int id)
@@ -119,13 +104,29 @@ namespace DynamoDb.Libs.DynamoDb
             return await context.LoadAsync<MiniLibrary>(id);
         }
 
-        public async Task<MiniLibrary> AddBook(int miniLibId, Book book)
+        public async Task<MiniLibrary> AddBooks(int miniLibId, List<Book> books)
         {
             var context = new DynamoDBContext(dynamoClient);
             var miniLib = await context.LoadAsync<MiniLibrary>(miniLibId);
-            miniLib.Books.Add(book);
+            
+            foreach(var b in books)
+            {
+                miniLib.Books.Add(b);
+            }
+
             await context.SaveAsync(miniLib);
             return miniLib;
+        }
+
+        public async Task<List<MiniLibrary>> GetMiniLibrariesByBook(string title)
+        {
+            var context = new DynamoDBContext(dynamoClient);
+
+            var conditions = new List<ScanCondition> { new ScanCondition("Books", ScanOperator.Contains, title) };
+
+            var miniLibs = await context.ScanAsync<MiniLibrary>(conditions).GetRemainingAsync();
+
+            return miniLibs;
         }
     }
 }

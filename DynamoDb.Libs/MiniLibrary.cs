@@ -12,6 +12,6 @@ namespace DynamoDb.Libs
         public int Id { get; set; }
         public string Description { get; set; }
         public List<Book> Books { get; set; }
-        public string Address { get; set; }
+        public Address Address { get; set; }
     }
 }
